@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TNP2K · Timeline of Succession & Reform</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; }
+    body { background: #f4f7fb; display: flex; justify-content: center; padding: 2rem 1rem; }
+    .dashboard { max-width: 1300px; width: 100%; }
+    .header { margin-bottom: 2.5rem; }
+    .header h1 { font-size: 2.2rem; font-weight: 600; letter-spacing: -0.01em; color: #0b1e33; display: flex; align-items: center; gap: 0.75rem; }
+    .header h1 span { background: #0b1e33; color: white; font-size: 1rem; font-weight: 500; padding: 0.25rem 1rem; border-radius: 40px; letter-spacing: 0.02em; }
+    .subhead { font-size: 1.05rem; color: #3b4e62; margin-top: 0.5rem; border-left: 4px solid #2b7a9c; padding-left: 1.2rem; font-weight: 400; max-width: 800px; }
+    .timeline { display: flex; flex-direction: column; position: relative; padding-left: 2rem; }
+    .timeline::before { content: ''; position: absolute; left: 11px; top: 12px; bottom: 12px; width: 3px; background: #cbd7e6; border-radius: 3px; }
+    .phase { display: flex; gap: 1.5rem; margin-bottom: 2rem; position: relative; }
+    .phase-marker { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: white; border: 3px solid #2b7a9c; z-index: 2; margin-top: 0.2rem; box-shadow: 0 0 0 4px #f4f7fb; }
+    .phase-marker.filled { background: #2b7a9c; border-color: #1e5c78; }
+    .phase-marker.warning { border-color: #b45f3b; background: #fbe9e1; }
+    .phase-marker.dark { border-color: #1e3b4f; background: #1e3b4f; }
+    .phase-marker.critical { border-color: #a83232; background: #fde8e8; }
+    .phase-content { background: white; flex: 1; border-radius: 20px; padding: 1.5rem 1.8rem; box-shadow: 0 8px 20px rgba(0, 20, 30, 0.06); border: 1px solid #e5edf5; transition: 0.15s ease; }
+    .phase-content:hover { box-shadow: 0 12px 28px rgba(0, 20, 30, 0.1); border-color: #c2d6e6; }
+    .phase-header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.75rem 1.5rem; margin-bottom: 1rem; }
+    .phase-year { font-size: 1.9rem; font-weight: 700; color: #0b1e33; line-height: 1; letter-spacing: -0.02em; }
+    .phase-title { font-size: 1.15rem; font-weight: 600; color: #1e3b4f; background: #e9f0f8; padding: 0.25rem 0.9rem; border-radius: 40px; }
+    .phase-badge { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; background: #d9e6f2; color: #1a4b66; padding: 0.2rem 0.7rem; border-radius: 30px; margin-left: auto; }
+    .phase-badge.critical { background: #fde8e8; color: #8b2c2c; }
+    .phase-desc { color: #2f4053; line-height: 1.6; font-size: 0.98rem; margin-bottom: 0.75rem; }
+    .phase-desc strong { color: #0b1e33; font-weight: 600; }
+    .phase-desc ul { margin: 0.5rem 0 0.5rem 1.2rem; color: #2f4053; }
+    .phase-desc li { margin-bottom: 0.3rem; }
+    .doc-ref { font-size: 0.8rem; color: #5f7388; background: #f2f6fb; padding: 0.5rem 1rem; border-radius: 12px; margin-top: 0.6rem; display: inline-block; border-left: 3px solid #2b7a9c; }
+    .doc-ref i { font-style: normal; font-weight: 500; color: #2b7a9c; }
+    .doc-ref a { color: #2b7a9c; text-decoration: none; border-bottom: 1px dotted #9db8cc; }
+    .doc-ref a:hover { border-bottom: 1px solid #2b7a9c; }
+    .study-box { background: #f0f7fc; border-left: 4px solid #2b7a9c; padding: 0.8rem 1rem; border-radius: 10px; margin-top: 0.8rem; font-size: 0.9rem; color: #1e3b4f; }
+    .study-box strong { color: #1e5c78; }
+    .study-box a { color: #1e5c78; text-decoration: none; border-bottom: 1px dotted #9db8cc; }
+    .criticism { background: #fef8f6; border-left: 4px solid #b45f3b; padding: 0.8rem 1rem; border-radius: 10px; margin-top: 0.8rem; font-size: 0.9rem; color: #5a3a2e; }
+    .criticism strong { color: #8b3a1e; }
+    .criticism a { color: #8b3a1e; text-decoration: none; border-bottom: 1px dotted #c49a8a; }
+    .outcome-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-top: 2.5rem; }
+    .outcome-card { background: white; border-radius: 18px; padding: 1.6rem 1.4rem; border: 1px solid #dfe9f2; box-shadow: 0 6px 14px rgba(0, 20, 30, 0.04); }
+    .outcome-card h3 { font-size: 1.1rem; font-weight: 600; color: #1e3b4f; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+    .outcome-card h3 .icon { font-size: 1.4rem; }
+    .outcome-card p { color: #2f4053; font-size: 0.94rem; line-height: 1.6; }
+    .outcome-card .small-stat { font-size: 1.5rem; font-weight: 700; color: #0b1e33; margin-bottom: 0.25rem; letter-spacing: -0.02em; }
+    .references { margin-top: 3rem; background: white; border-radius: 20px; padding: 1.8rem 2rem; border: 1px solid #dfe9f2; box-shadow: 0 6px 14px rgba(0, 20, 30, 0.04); }
+    .references h2 { font-size: 1.4rem; font-weight: 600; color: #0b1e33; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; }
+    .references ul { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
+    .references li { font-size: 0.9rem; color: #2f4053; line-height: 1.5; padding-left: 1.2rem; position: relative; }
+    .references li::before { content: '↗'; position: absolute; left: 0; color: #2b7a9c; font-weight: 600; }
+    .references a { color: #1e5c78; text-decoration: none; border-bottom: 1px dotted #9db8cc; }
+    .references a:hover { border-bottom: 1px solid #1e5c78; }
+    .footnote { margin-top: 2.5rem; font-size: 0.8rem; color: #6b7f93; text-align: center; border-top: 1px solid #d9e2ec; padding-top: 1.5rem; }
+    @media (max-width: 640px) { .phase-header { flex-direction: column; gap: 0.3rem; } .phase-badge { margin-left: 0; } .phase-year { font-size: 1.5rem; } .timeline { padding-left: 1rem; } .timeline::before { left: 7px; } .phase-marker { width: 20px; height: 20px; } .phase-content { padding: 1.2rem; } }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <div class="header">
+      <h1>TNP2K · Timeline of Succession & Reform <span>2010–2025</span></h1>
+      <div class="subhead">Institutional evolution of Indonesia’s poverty reduction coordination framework and the consumption-decile targeting system, based on official regulations, program documents, international impact evaluations, and media coverage.</div>
+    </div>
+
+    <div class="timeline">
+
+      <!-- 2004–2011 -->
+      <div class="phase">
+        <div class="phase-marker filled"></div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-year">2004–2011</span>
+            <span class="phase-title">Legal foundation for social security</span>
+            <span class="phase-badge">UU 40/2004 · UU 24/2011</span>
+          </div>
+          <div class="phase-desc">
+            <strong>UU No. 40/2004 (SJSN)</strong> established the national social security system. <strong>UU No. 24/2011 (BPJS)</strong> created BPJS Kesehatan and BPJS Ketenagakerjaan to implement SJSN. These laws provided the legal umbrella for the health insurance expansion (KIS/PBI) that TNP2K’s targeting data would later serve.
+          </div>
+          <div class="doc-ref"><i>Official documents:</i> <a href="https://peraturan.bpk.go.id/Details/40787/uu-no-40-tahun-" target="_blank">UU 40/2004 (SJSN)</a>; <a href="https://peraturan.bpk.go.id/Details/39268/uu-no-28-tahun-2002" target="_blank">UU 24/2011 (BPJS)</a>.</div>
+        </div>
+      </div>
+
+      <!-- 2010 -->
+      <div class="phase">
+        <div class="phase-marker filled"></div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-year">2010</span>
+            <span class="phase-title">Formulation & Launch</span>
+            <span class="phase-badge">Perpres 15/2010</span>
+          </div>
+          <div class="phase-desc">
+            <strong>TNP2K established</strong> by Presidential Regulation No. 15/2010, chaired by the Vice President, to coordinate poverty reduction across ministries. It replaced the previous coordination body (Perpres 13/2009). DFAT’s <strong>PRSF</strong> launched in April 2010.
+          </div>
+          <div class="study-box">
+            <strong>Official analysis (DFAT ICR, 2015):</strong> PRSF was “a creature of circumstances” — a combination of “the election of a reform orientated Vice President with an academic background” and Australia’s willingness to take risks. The approach “relied heavily on the Indonesian leadership to drive an agenda in a highly contested policy space” [citation:1].
+          </div>
+          <div class="doc-ref"><i>Official document:</i> <a href="https://peraturan.bpk.go.id/Details/41038/perpres-no-15-tahun-2010" target="_blank">Perpres 15/2010</a>.</div>
+        </div>
+      </div>
+
+      <!-- 2011–2012 -->
+      <div class="phase">
+        <div class="phase-marker filled"></div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-year">2011–2012</span>
+            <span class="phase-title">BDT built & first programs targeted</span>
+            <span class="phase-badge">PPLS 2011 · BSM · Raskin · Jamkesmas</span>
+          </div>
+          <div class="phase-desc">
+            The <strong>Unified Database (BDT)</strong> was developed from PPLS 2011 data using a district-specific Proxy Means Test (PMT) anchored to BPS Susenas. The BDT classified households by <strong>consumption decile (desil)</strong>, enabling precise targeting. By 2012, the BDT was used for <strong>Raskin</strong>, <strong>PKH</strong>, <strong>BSM</strong>, and <strong>Jamkesmas</strong>.
+          </div>
+          <div class="study-box">
+            <strong>International evidence (3ie/J-PAL, 2012):</strong> A randomized controlled trial across 600–640 villages compared PMT, community targeting, and self-targeting. The study found that <strong>self-targeting identified poorer beneficiaries at lower administrative cost</strong>, while community targeting achieved higher satisfaction but was less precise at identifying the poor [citation:4][citation:5]. This evaluation directly informed TNP2K’s discussions on updating the Unified Database [citation:13].
+          </div>
+          <div class="doc-ref"><i>Reference:</i> <a href="https://www.tnp2k.go.id/download/32736SOPBDTFA.pdf" target="_blank">TNP2K SOP BDT</a>; <a href="https://3ieimpact.org/evidence-hub/publications/impact-evaluations/targeting-poor-evidence-field-experiment-indonesia" target="_blank">3ie Impact Evaluation Report 12</a>.</div>
+        </div>
+      </div>
+
+      <!-- 2013 -->
+      <div class="phase">
+        <div class="phase-marker warning"></div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-year">2013</span>
+            <span class="phase-title">BLSM & KPS — crisis compensation via BDT</span>
+            <span class="phase-badge">BLSM · KPS</span>
+          </div>
+          <div class="phase-desc">
+            When fuel subsidies were cut, the government used the BDT to deliver <strong>Bantuan Langsung Sementara Masyarakat (BLSM)</strong> — unconditional cash transfers to <strong>15.5 million households</strong>. The <strong>Kartu Perlindungan Sosial (KPS)</strong> was introduced as the first national beneficiary card.
+          </div>
+          <div class="doc-ref"><i>Reference:</i> <a href="https://www.antaranews.com/berita/379940/banggar-dpr-setujui-blsm-rp932-triliun" target="_blank">ANTARA — BLSM Rp9.32T approved</a>.</div>
+        </div>
+      </div>
+
+      <!-- 2014 -->
+      <div class="phase">
+        <div class="phase-marker dark"></div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-year">2014</span>
+            <span class="phase-title">KKS · KIS · KIP — integrated card-based reform</span>
+            <span class="phase-badge">P4S · JKN</span>
+          </div>
+          <div class="phase-desc">
+            The BDT deciles powered the launch of three flagship programs on <strong>3 November 2014</strong>:
+            <ul>
+              <li><strong>KKS (Kartu Keluarga Sejahtera)</strong> — replaced KPS, linked to <em>Simpanan Keluarga Sejahtera</em>.</li>
+              <li><strong>KIS (Kartu Indonesia Sehat)</strong> — health insurance for <strong>86.4 million PBI</strong> under JKN/BPJS, replacing Jamkesmas.</li>
+              <li><strong>KIP (Kartu Indonesia Pintar)</strong> — education cash transfers for children aged 7–18 from poor families, replacing and expanding BSM.</li>
+            </ul>
+          </div>
+          <div class="doc-ref"><i>Reference:</i> <a href="https://arsip.kemenkopmk.go.id/artikel/pemerintah-luncurkan-secara-bertahap-program-simpanan-keluarga-sejahtera-program-indonesia" target="_blank">Kemenko PMK — Launch of KKS, KIP, KIS</a>.</div>
+        </div>
+      </div>
+
+      <!-- 2015 -->
+      <div class="phase">
+        <div class="phase-marker warning"></div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-year">2015</span>
+            <span class="phase-title">Perpres 96/2015 — expanded mandate</span>
+            <span class="phase-badge">MAHKOTA · DTPPFM</span>
+          </div>
+          <div class="phase-desc">
+            <strong>Perpres No. 96/2015</strong> amended the 2010 regulation, expanding TNP2K’s membership. PRSF concluded and was replaced by <strong>MAHKOTA Indonesia</strong> (2015–2023). In <strong>2016</strong>, at the request of the Social Minister, TNP2K handed over management of the <strong>BDT to Kemensos</strong> (renamed DTPPFM).
+          </div>
+          <div class="study-box">
+            <strong>Official analysis (DFAT ICR, 2015):</strong> The Quality Assurance system “was not universally welcomed by all stakeholders.” Many at TNP2K saw it as “a management control or compliance tool being imposed on them.” Strong Embassy engagement made the difference in establishing it [citation:1].
+          </div>
+          <div class="doc-ref"><i>Official documents:</i> <a href="https://peraturan.bpk.go.id/Details/41841/perpres-no-96-tahun-2015" target="_blank">Perpres 96/2015</a>.</div>
+        </div>
+      </div>
+
+      <!-- 2017–2021 -->
+      <div class="phase">
+        <div class="phase-marker warning"></div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-year">2017–2021</span>
+            <span class="phase-title">Data fragmentation & P3KE workaround</span>
+            <span class="phase-badge">DTKS · Regsosek · P3KE</span>
+          </div>
+          <div class="phase-desc">
+            The BDT formally became <strong>DTKS</strong> under Kemensos regulations. TNP2K retained updating functions with BPS. In 2021, TNP2K worked with <strong>BKKBN</strong> on <strong>P3KE</strong> — a by-name-by-address extreme poverty targeting dataset.
+          </div>
+          <div class="study-box">
+            <strong>Official analysis (ODI, 2015):</strong> PRSF “found it hard to access the decisions being made about the work.” TNP2K “had little or no incentives to keep PRSF informed.” The programme “found itself report to one government and support another, with very little authority or influence on either one” [citation:9].
+          </div>
+          <div class="study-box">
+            <strong>International evidence (NBER, 2025):</strong> A study of community targeting at scale during COVID-19 (8 million households) found “strongly progressive targeting” but “not quite as strong as if they had used a fully up-to-date proxy means test” [citation:6][citation:14].
+          </div>
+        </div>
+      </div>
+
+      <!-- 2022 -->
+      <div class="phase">
+        <div class="phase-marker critical"></div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-year">2022</span>
+            <span class="phase-title">Extreme Poverty Push — Inpres 4/2022</span>
+            <span class="phase-badge critical">Multi-ministry mandate</span>
+          </div>
+          <div class="phase-desc">
+            <strong>Inpres No. 4/2022</strong> launched the Extreme Poverty Elimination Acceleration program, with three strategic pillars: (1) reducing expenditure burden, (2) increasing income/productivity, (3) reducing poverty pockets. <strong>P3KE</strong> became the operational data instrument for by-name, by-address, by-NIK targeting.
+          </div>
+          <div class="study-box">
+            <strong>Official analysis (World Bank IEG, 2026):</strong> The Bank Group’s support for human capital (FY13–FY23) followed a “deliberate sequence: early diagnostics identified binding constraints, sustained analytics deepened policy dialogue, and scaled-up financing followed once reform momentum and institutional readiness strengthened.” More than half of advisory services “directly informed lending,” and 43% “contributed to national strategies” [citation:2].
+          </div>
+          <div class="criticism">
+            <strong>Media coverage (Tempo, Jan 2024):</strong> INDEF assessed the 0% target as “difficult to achieve,” citing DTKS updating challenges and new entrants into extreme poverty. <a href="https://www.tempo.co/ekonomi/jokowi-tebar-bansos-tapi-kemiskinan-ekstrem-masih-satu-persen-indef-sulit-0-persen-di-2024-92928" target="_blank">→ Read full Tempo article</a>
+          </div>
+          <div class="doc-ref"><i>Official document:</i> <a href="https://peraturan.bpk.go.id/Details/211477/inpres-no-4-tahun-2022" target="_blank">Inpres No. 4/2022</a>.</div>
+        </div>
+      </div>
+
+      <!-- 2023 -->
+      <div class="phase">
+        <div class="phase-marker warning"></div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-year">2023</span>
+            <span class="phase-title">PROAKTIF launches as successor to MAHKOTA</span>
+            <span class="phase-badge">PROAKTIF (2023–2025)</span>
+          </div>
+          <div class="phase-desc">
+            <strong>PROAKTIF</strong> (Poverty Alleviation and Comprehensive, Inclusive and Adaptive Social Protection) replaced MAHKOTA as DFAT’s support facility for TNP2K’s Policy Team. This marked <strong>15 years of continuous Australian support</strong> (2010–2025).
+          </div>
+          <div class="criticism">
+            <strong>Media coverage (Tempo, Aug 2023):</strong> Celios noted the 0% extreme poverty target was a “big challenge” because extreme poor populations are in remote villages. <a href="https://www.tempo.co/ekonomi/pemerintah-prediksi-angka-kemiskinan-ekstrem-pada-akhir-tahun-ini-0-8-persen-ini-penjelasan-lengkapnya-159152" target="_blank">→ Read full Tempo article</a>
+          </div>
+          <div class="doc-ref"><i>Reference:</i> <a href="https://dt-global.com/projects/proaktif/" target="_blank">DT Global — PROAKTIF program page</a>.</div>
+        </div>
+      </div>
+
+      <!-- 2024 -->
+      <div class="phase">
+        <div class="phase-marker dark"></div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-year">2024</span>
+            <span class="phase-title">Succession — TNP2K to BP Taskin</span>
+            <span class="phase-badge">Perpres 163/2024</span>
+          </div>
+          <div class="phase-desc">
+            TNP2K was formally succeeded on <strong>5 November 2024</strong> by Presidential Regulation No. 163/2024, which created <strong>BP Taskin</strong> (Badan Percepatan Pengentasan Kemiskinan) as a non-structural body reporting to the President. The Perpres explicitly revoked both Perpres 15/2010 and Perpres 96/2015.
+          </div>
+          <div class="criticism">
+            <strong>Media coverage (Tempo, Jan 2024):</strong> INDEF’s Tauhid Ahmad stated the 0% target was “somewhat difficult to achieve,” citing inadequate DTKS updating. <a href="https://www.tempo.co/ekonomi/jokowi-tebar-bansos-tapi-kemiskinan-ekstrem-masih-satu-persen-indef-sulit-0-persen-di-2024-92928" target="_blank">→ Read full Tempo article</a>
+          </div>
+          <div class="doc-ref"><i>Official document:</i> <a href="https://peraturan.bpk.go.id/Details/306716" target="_blank">Perpres 163/2024</a>.</div>
+        </div>
+      </div>
+
+      <!-- 2025 -->
+      <div class="phase">
+        <div class="phase-marker dark"></div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <span class="phase-year">2025</span>
+            <span class="phase-title">DTSEN consolidation & PROAKTIF conclusion</span>
+            <span class="phase-badge">Inpres 4/2025</span>
+          </div>
+          <div class="phase-desc">
+            The three datasets — <strong>DTKS, Regsosek, P3KE</strong> — were merged into <strong>DTSEN</strong> (Data Tunggal Sosial Ekonomi Nasional) under Presidential Instruction No. 4/2025, signed 5 February 2025. The Inpres instructs for optimalisasi integrasi data sosial dan ekonomi nasional with akurasi, interoperabilitas, dan pemutakhiran data. <strong>PROAKTIF concluded in 2025</strong>, ending 15 years of DFAT-supported TNP2K operations.
+          </div>
+          <div class="study-box">
+            <strong>Official analysis (OECD, 2019/2024):</strong> Indonesia’s social protection reform faces a “kapasitas kelembagaan” challenge: “Fragmentasi tata kelola, keterbatasan integrasi data, dan koordinasi antar lembaga yang belum optimal” are more determining factors than normative obstacles. Comparative analysis of South Korea, Chile, and Vietnam shows “no single social protection reform model” — success depends on each country’s ability to adapt policy to its own institutional conditions [citation:3].
+          </div>
+          <div class="criticism">
+            <strong>Media coverage (Kompas, Feb 2025):</strong> Populi Center noted DTSEN’s main challenge is “kurangnya sinergi antarinstansi” (lack of inter-agency synergy). <a href="https://sorotpolitik.kompas.com/f-pkb-rumah-rakyat/read/2025/02/24/19441511/pengamat-sinergitas-jadi-tantangan-keberhasilan-dtsen-kemenko-pm-pegang" target="_blank">→ Read full Kompas article</a>
+          </div>
+          <div class="doc-ref"><i>Official document:</i> <a href="https://peraturan.bpk.go.id/Details/314649/inpres-no-4-tahun-202" target="_blank">Inpres No. 4/2025</a>.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="outcome-grid">
+      <div class="outcome-card">
+        <h3><span class="icon">📋</span> Institutional succession</h3>
+        <p>TNP2K’s coordination mandate moved to <strong>BP Taskin</strong> (Perpres 163/2024).</p>
+      </div>
+      <div class="outcome-card">
+        <h3><span class="icon">🗂️</span> Data consolidation</h3>
+        <div class="small-stat">1 registry</div>
+        <p>DTKS, Regsosek, and P3KE merged into <strong>DTSEN</strong> (Inpres 4/2025).</p>
+      </div>
+      <div class="outcome-card">
+        <h3><span class="icon">🧮</span> Technical legacy</h3>
+        <p>The <strong>Proxy Means Test (PMT)</strong> — district-specific, Susenas-anchored — survived inside BPS and generates DTSEN’s decile rankings.</p>
+      </div>
+      <div class="outcome-card">
+        <h3><span class="icon">📊</span> Targeting evidence</h3>
+        <p>RCTs show <strong>PMT outperforms community targeting</strong> on precision, while community methods achieve higher satisfaction. Self-targeting is more cost-effective [citation:4][citation:5][citation:6].</p>
+      </div>
+    </div>
+
+    <div class="references">
+      <h2>📚 Official Regulations, Evaluations & International Studies</h2>
+      <ul>
+        <li><a href="https://peraturan.bpk.go.id/Details/40787/uu-no-40-tahun-" target="_blank">UU No. 40/2004 — Sistem Jaminan Sosial Nasional (SJSN)</a></li>
+        <li><a href="https://peraturan.bpk.go.id/Details/39268/uu-no-28-tahun-2002" target="_blank">UU No. 24/2011 — Badan Penyelenggara Jaminan Sosial (BPJS)</a></li>
+        <li><a href="https://peraturan.bpk.go.id/Details/41038/perpres-no-15-tahun-2010" target="_blank">Perpres No. 15/2010 — Percepatan Penanggulangan Kemiskinan</a></li>
+        <li><a href="https://peraturan.bpk.go.id/Details/41841/perpres-no-96-tahun-2015" target="_blank">Perpres No. 96/2015 — Perubahan atas Perpres 15/2010</a></li>
+        <li><a href="https://peraturan.bpk.go.id/Details/211477/inpres-no-4-tahun-2022" target="_blank">Inpres No. 4/2022 — Percepatan Penghapusan Kemiskinan Ekstrem</a></li>
+        <li><a href="https://peraturan.bpk.go.id/Details/306716" target="_blank">Perpres No. 163/2024 — Badan Percepatan Pengentasan Kemiskinan</a></li>
+        <li><a href="https://peraturan.bpk.go.id/Details/314649/inpres-no-4-tahun-202" target="_blank">Inpres No. 4/2025 — Data Tunggal Sosial dan Ekonomi Nasional</a></li>
+        <li><a href="https://www.dfat.gov.au/sites/default/files/indonesia-poverty-reduction-support-facility-icr-2015.pdf" target="_blank">DFAT — PRSF Independent Completion Report (2015)</a></li>
+        <li><a href="https://media.odi.org/documents/10463.pdf" target="_blank">ODI — Impact Evaluation for Portfolio Programmes on Policy Influence (PRSF case study)</a></li>
+        <li><a href="https://3ieimpact.org/evidence-hub/publications/impact-evaluations/targeting-poor-evidence-field-experiment-indonesia" target="_blank">3ie Impact Evaluation Report 12 — Targeting the Poor: Evidence from a Field Experiment in Indonesia</a></li>
+        <li><a href="https://www.povertyactionlab.org/print/pdf/node/1758" target="_blank">J-PAL — Improving Targeting of a Conditional Cash Transfer Program in Indonesia</a></li>
+        <li><a href="https://3ieimpact.org/evidence-hub/Evidence-impact-summaries/improving-targeting-social-welfare-programmes-indonesia" target="_blank">3ie Evidence Impact Summary — Improving Targeting in Social Welfare Programmes (2019)</a></li>
+        <li><a href="https://www.hks.harvard.edu/publications/community-targeting-scale" target="_blank">Sumarto et al. (2025) — Community Targeting at Scale, NBER Working Paper</a></li>
+        <li><a href="https://ieg.worldbankgroup.org/blog/driving-impact-human-capital-lessons-world-bank-group-engagement-indonesia" target="_blank">World Bank IEG — Driving Impact in Human Capital: Lessons from Indonesia (2026)</a></li>
+        <li><a href="https://jurnalbpjamsostek.or.id/index.php/bpjamsostek/article/download/78/36" target="_blank">OECD Recommendations and Indonesia’s Social Protection Reform — Comparative Analysis (BPJS Journal)</a></li>
+        <li><a href="https://www.tempo.co/ekonomi/jokowi-tebar-bansos-tapi-kemiskinan-ekstrem-masih-satu-persen-indef-sulit-0-persen-di-2024-92928" target="_blank">Tempo — INDEF critique (Jan 2024)</a></li>
+        <li><a href="https://www.tempo.co/ekonomi/pemerintah-prediksi-angka-kemiskinan-ekstrem-pada-akhir-tahun-ini-0-8-persen-ini-penjelasan-lengkapnya-159152" target="_blank">Tempo — Celios critique (Aug 2023)</a></li>
+        <li><a href="https://sorotpolitik.kompas.com/f-pkb-rumah-rakyat/read/2025/02/24/19441511/pengamat-sinergitas-jadi-tantangan-keberhasilan-dtsen-kemenko-pm-pegang" target="_blank">Kompas — Populi Center on DTSEN synergy (Feb 2025)</a></li>
+        <li><a href="https://dt-global.com/projects/proaktif/" target="_blank">DT Global — PROAKTIF Program Page</a></li>
+      </ul>
+    </div>
+
+    <div class="footnote">
+      Timeline based on official regulations from JDIH/BPK RI, program launch documents, DFAT/World Bank/ODI evaluations, international impact evaluations (J-PAL/3ie/NBER), and media coverage from Kompas and Tempo.
+    </div>
+  </div>
+</body>
+</html>
